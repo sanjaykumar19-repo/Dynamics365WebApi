@@ -5,7 +5,7 @@
    using System;
    using System.Threading.Tasks;
 
-   public interface ICrmApiClient
+   public interface ICrmApiService
    {
       /// <summary>
       /// User successfully connected or not

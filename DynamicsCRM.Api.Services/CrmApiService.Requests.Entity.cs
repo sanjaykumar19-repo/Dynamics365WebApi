@@ -10,7 +10,7 @@
 	using System.Text.RegularExpressions;
 	using System.Threading.Tasks;
 
-	public sealed partial class CrmApiService
+	public sealed partial class CrmApiService : ICrmApiService
 	{
 		/// <summary>
 		/// Create a new entity record in Dynamics CRM and returns record GUID
@@ -19,19 +19,19 @@
 		/// <example>contacts, opportunities </example>
 		/// <param name="entity"> Request Object</param>
 		/// <returns> Record Id</returns>
-		async Task<Guid> ICrmApiClient.CreateRecord(string entitySetName, Entity entity)
+		async Task<Guid> ICrmApiService.CreateRecord(string entitySetName, Entity entity)
 		{
 			ThrowIf.ArgumentNull("entityLogicalName can't be null", entitySetName);
 			ThrowIf.ArgumentNull("jsonRequest can't be null", entity);
-			string requestJson = entity.GetEntityJson(_httpCrmClient);
-			string requestUri = string.Format("{0}{1}", _httpCrmClient.BaseAddress, entitySetName);
+			string requestJson = entity.GetEntityJson(HttpCrmClient);
+			string requestUri = string.Format("{0}{1}", HttpCrmClient.BaseAddress, entitySetName);
 			HttpRequestMessage createRequest = new HttpRequestMessage(HttpMethod.Post, requestUri)
 			{
 				Content = new StringContent(requestJson)
 			};
 			createRequest.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-			HttpResponseMessage createResponse = await _httpCrmClient.SendAsync(createRequest, HttpCompletionOption.ResponseHeadersRead);
+			HttpResponseMessage createResponse = await HttpCrmClient.SendAsync(createRequest, HttpCompletionOption.ResponseHeadersRead);
 			if (createResponse.IsSuccessStatusCode)
 			{
 				string recordUri = createResponse.Headers.GetValues("OData-EntityId")?.FirstOrDefault();
@@ -61,20 +61,20 @@
 		/// <param name="id">Record Id</param>
 		/// <param name="updateEntity"> Request Object</param>
 		/// <returns> success </returns>
-		async Task<bool> ICrmApiClient.UpdateRecord(string entityLogicalName, Guid id, Entity updateEntity)
+		async Task<bool> ICrmApiService.UpdateRecord(string entityLogicalName, Guid id, Entity updateEntity)
 		{
 			ThrowIf.ArgumentNull("entityLogicalName can't be null", entityLogicalName);
 			ThrowIf.ArgumentNull("Record Id can't be blank", id);
 			ThrowIf.ArgumentNull("jsonUpdateRequest can't be blank", updateEntity);
 
-			string requestUri = string.Format("{0}{1}s({2})", _httpCrmClient.BaseAddress, entityLogicalName, id);
+			string requestUri = string.Format("{0}{1}s({2})", HttpCrmClient.BaseAddress, entityLogicalName, id);
 			HttpMethod httpMethod = new HttpMethod("Patch");
 			HttpRequestMessage updateRequest = new HttpRequestMessage(httpMethod, requestUri)
 			{
-				Content = new StringContent(updateEntity.GetEntityJson(_httpCrmClient), Encoding.UTF8, "application/json")
+				Content = new StringContent(updateEntity.GetEntityJson(HttpCrmClient), Encoding.UTF8, "application/json")
 			};
 
-			HttpResponseMessage updateResponse = await _httpCrmClient.SendAsync(updateRequest, HttpCompletionOption.ResponseContentRead);
+			HttpResponseMessage updateResponse = await HttpCrmClient.SendAsync(updateRequest, HttpCompletionOption.ResponseContentRead);
 			if (updateResponse.IsSuccessStatusCode)
 			{
 				return true;

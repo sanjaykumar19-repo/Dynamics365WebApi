@@ -11,20 +11,15 @@ namespace Helper
 			ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 			try
 			{
-				string tokenCachePath = @"c:\\Temp\\cache.txt";
+				string tokenCachePath = @"c:\\cache.txt";
 				Uri instanceUrl = new Uri("https://orgname.crm8.dynamics.com");
-
 				var connection = new CrmServiceClient(instanceUrl, "clientId",
-					"secret", true, tokenCachePath);
+									  "secret", true, tokenCachePath);
 
-				if (connection.IsReady)
-				{
-					return connection;
-				}
-				else
-					throw new Exception("unable to connect");
+				return connection.IsReady ? connection
+					: throw new Exception($"unable to connect: {connection.LastCrmError}");
 			}
-			catch (Exception ex)
+			catch
 			{
 				throw;
 			}

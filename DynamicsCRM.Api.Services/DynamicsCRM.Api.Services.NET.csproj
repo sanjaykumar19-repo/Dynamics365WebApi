@@ -66,15 +66,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CrmApiOperationForEntity.cs" />
-    <Compile Include="CrmApiOperation.cs" />
+    <Compile Include="CrmApiService.Requests.Entity.cs" />
+    <Compile Include="CrmApiService.Requests.cs" />
     <Compile Include="CrmApiService.cs" />
     <Compile Include="Helpers\EntityExtensions.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\JSONSerializer.cs" />
     <Compile Include="Helpers\OAuthMessageHandler.cs" />
     <Compile Include="Helpers\ThrowIf.cs" />
-    <Compile Include="Interfaces\ICrmApiClient.cs" />
+    <Compile Include="Interfaces\ICrmApiService.cs" />
     <Compile Include="Models\EntityDefinition.cs" />
     <Compile Include="Models\OAuthToken.cs" />
     <Compile Include="Models\WebApiConfiguration.cs" />

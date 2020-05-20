@@ -15,7 +15,7 @@ namespace DynamicsCRM
 			var entity1 = new Entity("opportunity");
 			entity1.Attributes["parentaccountid"] = entity.Attributes["parentaccountid"];
 			entity1.Attributes["parentcontactid"] = entity.Attributes["parentcontactid"];
-			entity1.Attributes["name"] = (string)entity.Attributes["name"] + " - API";
+			entity1.Attributes["name"] = (string)entity.Attributes["name"] + " - API " + DateTime.Now.ToLongDateString();
 			entity1.Attributes["purchasetimeframe"] = entity.Attributes["purchasetimeframe"];
 			entity1.Attributes["budgetamount"] = entity.Attributes["budgetamount"];
 			entity1.Attributes["purchaseprocess"] = entity.Attributes["purchaseprocess"];
@@ -31,7 +31,8 @@ namespace DynamicsCRM
 				TenantId = ""
 			};
 
-			CrmApiService.CreateCrmApiInstance(config);
+			CrmApiService.CreateCrmApiServiceInstance(config);
+			
 			var id = CrmApiService.Instance.CreateRecord("opportunities", entity1).GetAwaiter().GetResult();
 		}
 	}
