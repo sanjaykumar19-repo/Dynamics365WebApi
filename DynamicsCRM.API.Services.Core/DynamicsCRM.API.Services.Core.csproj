@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>DynamicsCRM.API.Services.Core</AssemblyName>
+    <RootNamespace>DynamicsCRM.Api.Services</RootNamespace>
+  </PropertyGroup>
+
+</Project>
