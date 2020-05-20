@@ -4,7 +4,7 @@
 	using System.Runtime.Serialization.Json;
 	using System.Text;
 
-	public static class JSONSerializer<TType> where TType : class
+	public static class JSONSerializer<TType>
 	{
 		/// <summary>
 		/// Serializes an object to JSON
@@ -12,9 +12,11 @@
 		public static string Serialize(TType instance)
 		{
 			DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TType));
-			using MemoryStream stream = new MemoryStream();
-			serializer.WriteObject(stream, instance);
-			return Encoding.Default.GetString(stream.ToArray());
+			using (MemoryStream stream = new MemoryStream())
+			{
+				serializer.WriteObject(stream, instance);
+				return Encoding.Default.GetString(stream.ToArray());
+			}
 		}
 
 		/// <summary>
@@ -22,9 +24,11 @@
 		/// </summary>
 		public static TType DeSerialize(string json)
 		{
-			using var stream = new MemoryStream(Encoding.Default.GetBytes(json));
-			var serializer = new DataContractJsonSerializer(typeof(TType));
-			return serializer.ReadObject(stream) as TType;
+			using (var stream = new MemoryStream(Encoding.Default.GetBytes(json)))
+			{
+				var serializer = new DataContractJsonSerializer(typeof(TType));
+				return (TType)serializer.ReadObject(stream);
+			}
 		}
 	}
 }

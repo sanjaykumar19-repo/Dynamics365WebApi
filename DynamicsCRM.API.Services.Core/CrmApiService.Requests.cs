@@ -194,7 +194,8 @@
 			ThrowIf.ArgumentNull("jsonUpdateRequest can't be blank", jsonUpdateRequest);
 
 			string requestUri = string.Format("{0}{1}({2})", HttpCrmClient.BaseAddress, entitySetName, id);
-			HttpRequestMessage updateRequest = new HttpRequestMessage(HttpMethod.Patch, requestUri)
+			HttpMethod httpMethod = new HttpMethod("Patch");
+			HttpRequestMessage updateRequest = new HttpRequestMessage(httpMethod, requestUri)
 			{
 				Content = new StringContent(jsonUpdateRequest, Encoding.UTF8, "application/json")
 			};
